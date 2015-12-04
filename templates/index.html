@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>IoT Clock @ {{ wifi }}</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+          integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
+          crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"
+          integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+            integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ=="
+            crossorigin="anonymous"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<div class="well">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>
+                IoT Clock
+            </h2>
+
+            <p>
+                The clock you want to control is connected to <strong>{{ wifi }}</strong> right now.
+            </p>
+        </div>
+    </div>
+</div>
+{%- if done == true %}
+<div class="container">
+    <form action="/" method="get">
+        <div class="row text-center">
+            <div class="col-sm-offset-4 col-sm-4">
+                <button class="btn btn-primary btn-block btn-lg" type="submit">Done</button>
+            </div>
+        </div>
+    </form>
+</div>
+{%- else %}
+<div class="container well">
+    <form action="/" method="post">
+        <div class="row">
+            <div class=" col-sm-offset-2 col-sm-4 ">
+                {%- for radio in clock_modes %}
+                <div class="radio">
+                    {%- if loop.index -1 == mode %}
+                    <label><input type="radio" name="mode" checked="checked" value="{{ loop.index -1 }}">{{ radio
+                        }}</label>
+                    {%- else %}
+                    <label><input type="radio" name="mode" value="{{ loop.index -1 }}">{{ radio }}</label>
+                    {%- endif %}
+                </div>
+                {%- endfor %}
+            </div>
+            <div class="col-sm-4 ">
+                <div class="form-group">
+                    <label for="hour_hue">Hue for the hour hand:</label>
+                    <input type="text" class="form-control" id="hour_hue" name="hour_hue" value="{{ hour_hue }}">
+                </div>
+                <div class="form-group">
+                    <label for="minute_hue">Hue for the minute hand:</label>
+                    <input type="text" class="form-control" id="minute_hue" name="minute_hue" value="{{ minute_hue }}">
+                </div>
+                <div class="form-group">
+                    <label for="second_hue">Hue for the second hand:</label>
+                    <input type="text" class="form-control" id="second_hue" name="second_hue" value="{{ second_hue }}">
+                </div>
+                <div class="form-group">
+                    <label for="brightness">Brightness:</label>
+                    <input type="text" class="form-control" id="brightness" name="brightness" value="{{ brightness }}">
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-offset-4 col-sm-4">
+                <button class="btn btn-primary btn-block btn-lg" type="submit">Set</button>
+            </div>
+        </div>
+    </form>
+</div>
+{%- endif %}
+</body>
+</html>
+{% endautoescape %}
