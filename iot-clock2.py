@@ -1,6 +1,6 @@
 __author__ = 't800'
 
-# C:\Python27\python.exe "C:\Program Files (x86)\Google\google_appengine\dev_appserver.py" C:\Users\t800\PycharmProjects\iot-clock2
+
 
 import webapp2
 import jinja2
@@ -9,6 +9,9 @@ import json
 
 from google.appengine.api import urlfetch
 from google.appengine.api import urlfetch_errors
+
+particle_id = 'particle_id'
+access_token = 'access_token'
 
 clock_modes = ['Normal', 'Rainbow Secs', 'Random Secs', 'Rainbow and Random Secs', 'Trails', 'Rainbow Secs and Trails',
                'Random Secs and Trails', 'Rainbow, Random Secs and Trails', 'Reversed Normal', 'Reversed Rainbow Secs',
@@ -26,7 +29,7 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         try:
             config = json.loads(urlfetch.fetch(
-                'https://api.particle.io/v1/devices/43002e001147343339383037/getConfig?access_token=68ac7f91a8d33a696ad5d84d7f3d7d6c104c87d3',
+                'https://api.particle.io/v1/devices/' + particle_id + '/getConfig?access_token=' + access_token,
                 method=urlfetch.GET).content)['result']
             params = eval(config)
 
@@ -35,7 +38,7 @@ class MainPage(webapp2.RequestHandler):
             minute_hue = params['minuteHue']
             second_hue = params['secondHue']
             brightness = params['brightness']
-            wifi =  params['wifi']
+            wifi = params['wifi']
 
             self.build_form(mode, hour_hue, minute_hue, second_hue, brightness, wifi, False)
 
@@ -56,23 +59,23 @@ class MainPage(webapp2.RequestHandler):
         brightness = self.request.get('brightness')
 
         urlfetch.fetch(
-            'https://api.particle.io/v1/devices/43002e001147343339383037/setHaMode?access_token=68ac7f91a8d33a696ad5d84d7f3d7d6c104c87d3',
+            'https://api.particle.io/v1/devices/' + particle_id + '/setHaMode?access_token=' + access_token,
             payload='params=' + str(mode), method=urlfetch.POST)
         urlfetch.fetch(
-            'https://api.particle.io/v1/devices/43002e001147343339383037/setHHue?access_token=68ac7f91a8d33a696ad5d84d7f3d7d6c104c87d3',
+            'https://api.particle.io/v1/devices/' + particle_id + '/setHHue?access_token=' + access_token,
             payload='params=' + str(hour_hue), method=urlfetch.POST)
         urlfetch.fetch(
-            'https://api.particle.io/v1/devices/43002e001147343339383037/setMHue?access_token=68ac7f91a8d33a696ad5d84d7f3d7d6c104c87d3',
+            'https://api.particle.io/v1/devices/' + particle_id + '/setMHue?access_token=' + access_token,
             payload='params=' + str(minute_hue), method=urlfetch.POST)
         urlfetch.fetch(
-            'https://api.particle.io/v1/devices/43002e001147343339383037/setSHue?access_token=68ac7f91a8d33a696ad5d84d7f3d7d6c104c87d3',
+            'https://api.particle.io/v1/devices/' + particle_id + '/setSHue?access_token=' + access_token,
             payload='params=' + str(second_hue), method=urlfetch.POST)
         urlfetch.fetch(
-            'https://api.particle.io/v1/devices/43002e001147343339383037/setBright?access_token=68ac7f91a8d33a696ad5d84d7f3d7d6c104c87d3',
+            'https://api.particle.io/v1/devices/' + particle_id + '/setBright?access_token=' + access_token,
             payload='params=' + str(brightness), method=urlfetch.POST)
 
         wifi = json.loads(urlfetch.fetch(
-            'https://api.particle.io/v1/devices/43002e001147343339383037/getWifi?access_token=68ac7f91a8d33a696ad5d84d7f3d7d6c104c87d3',
+            'https://api.particle.io/v1/devices/' + particle_id + '/getWifi?access_token=' + access_token,
             method=urlfetch.GET).content)['result']
 
         self.build_form(mode, hour_hue, minute_hue, second_hue, brightness, wifi, True)
