@@ -1,7 +1,5 @@
 __author__ = 't800'
 
-
-
 import webapp2
 import jinja2
 import os
@@ -10,8 +8,13 @@ import json
 from google.appengine.api import urlfetch
 from google.appengine.api import urlfetch_errors
 
-particle_id = 'particle_id'
-access_token = 'access_token'
+
+with open('config.json') as data_file:
+    data = json.load(data_file)
+    particle_id = data["Particle_ID"]
+    access_token = data["Access_Token"]
+
+
 
 clock_modes = ['Normal', 'Rainbow Secs', 'Random Secs', 'Rainbow and Random Secs', 'Trails', 'Rainbow Secs and Trails',
                'Random Secs and Trails', 'Rainbow, Random Secs and Trails', 'Reversed Normal', 'Reversed Rainbow Secs',
@@ -88,8 +91,6 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         self.response.write(template.render(template_values))
 
-
-# form action="https://api.particle.io/v1/devices/43002e001147343339383037/setHaMode?access_token=68ac7f91a8d33a696ad5d84d7f3d7d6c104c87d3"
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
