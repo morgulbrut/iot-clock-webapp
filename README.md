@@ -2,6 +2,6 @@
 
 https://hackaday.io/project/8645-iot-clock
 
-## Install: 
+## Configuration: 
 
-Put your own values in config.json
+Put your own values in your_config.json and rename it to config.json
